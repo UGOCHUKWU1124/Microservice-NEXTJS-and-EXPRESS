@@ -1,6 +1,31 @@
-# Simple Microservice E-commerce Platform
+# Simple Microservice E-commerce Platform Authentication And Unboarding
 
 A scalable e-commerce platform built with a microservices architecture using **Next.js** for the frontends and **Express.js** for the backend services. The project is managed as a monorepo using **Nx**, enabling seamless code sharing and efficient builds.
+
+## ✨ Features
+
+### 👤 User & Customer Features
+
+- **Authentication**: Secure registration and login using JWT.
+- **Profile Management**: Users can manage their profiles and avatars.
+
+### 🏪 Seller & Shop Management
+
+- **Seller Accounts**: Dedicated seller registration with Stripe and Paystack integrations.
+- **Shop Creation**: Sellers can create and customize their storefronts (banners, categories, business hours, social links).
+- **Dashboard**: A dedicated Next.js Admin UI (`seller-ui`) to manage their shop and monitor reviews/ratings.
+
+### 🌐 API Gateway
+
+- **Centralized Routing**: Acts as the single entry point, bridging the frontends with underlying microservices using `express-http-proxy`.
+- **Security & Reliability**: Implements **Express Rate Limiting** to prevent abuse, comprehensive **CORS** configuration, and request size limitations.
+- **Observability**: Intercepts requests for centralized logging and cookie parsing before forwarding them to downstream services.
+
+### ⚙️ Core Architecture
+
+- **Microservices**: Decoupled backend architecture with distinct services (`auth-service`, `seller-service`) routed via a central `api-gateway`.
+- **Monorepo Structure**: Uses Nx for efficient dependency management and sharing packages between applications.
+- **Data Modeling**: Robust MongoDB schema using Prisma ORM.
 
 ## 🚀 Technologies Used
 
@@ -54,7 +79,7 @@ The repository is structured into `apps` and `packages` to promote modularity an
 ### Prerequisites
 
 - Node.js (v20+)
-- PostgreSQL  or Mongodb (for Prisma)
+- PostgreSQL or Mongodb (for Prisma)
 - Redis Server
 - Environment variables configured (create `.env` based on services requirements)
 
