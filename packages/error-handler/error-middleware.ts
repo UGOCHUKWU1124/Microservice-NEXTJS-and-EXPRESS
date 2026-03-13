@@ -1,0 +1,15 @@
+import { Request, Response, NextFunction } from "express";
+import { AppError } from "../error-handler/index";
+
+export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof AppError) {
+        return res.status(err.statusCode).json({
+            success: false,
+            message: err.message,
+            ...(err.details && { details: err.details })
+        });
+    }
+
+    console.error("Unhandled error:", err);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+};

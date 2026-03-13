@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+
+// collection: images
+model Image {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  file_id String
+  url     String
+  userId  String? @unique @db.ObjectId
+  shopId  String? @unique @db.ObjectId
+  user    User?   @relation(fields: [userId], references: [id])
+  shop    Shop?   @relation(fields: [shopId], references: [id])
+
+  @@map("images")
+}
+
+// collection: users
+model User {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String        @unique
+  password    String?
+  following   String[]
+  avatar      Image?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  shopReviews ShopReview[]
+
+  @@map("users")
+}
+
+model ShopReview {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  rating    Float
+  reviews   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  shopId   String?  @db.ObjectId
+  shop      Shop?    @relation(fields: [shopId], references: [id])
+
+  @@map("shopReviews")
+}
+
+model Shop {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  bio           String?
+  category      String
+  avatar        Image?
+  coverBanner   String?
+  address       String
+  opening_hours String?
+  website       String?
+  socialLinks   Json[]
+  ratings       Float         @default(0)
+  reviews       ShopReview[]
+  sellerId      String        @unique @db.ObjectId
+  seller        Seller        @relation(fields: [sellerId], references: [id])
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@map("shops")
+}
+
+model Seller {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String   @unique
+  phone_number String
+  country      String
+  password     String
+  paystackId   String?
+  stripeId   String?
+  shop         Shop?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  @@map("sellers")
+}
+
+
+
+
+// id → the field name (what you call it in your Prisma model). // String → Prisma will treat this value as a String in your code. // @id → marks this field as the primary key (unique identifier). // @default(auto()) → automatically generate a new ObjectId when creating a record. // @map("_id") → tells Prisma this field maps to MongoDB’s real "_id" field. // @db.ObjectId → specifies that in MongoDB this field is stored as an ObjectId type. //@unique // Ensures no two records can have the same value in this field. //createdAt DateTime @default(now()) // Auto-sets the current date & time when record is created. //updatedAt DateTime @updatedAt // Auto-updates this field with current date & time whenever record changes.

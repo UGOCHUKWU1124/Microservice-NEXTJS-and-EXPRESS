@@ -1,0 +1,39 @@
+{
+  "name": "@hugo-store/auth-service",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "node csrc/main.ts"
+  },
+  "nx": {
+    "name": "auth-service",
+    "projectType": "application",
+    "sourceRoot": "auth-service/src",
+    "targets": {
+      "serve": {
+        "executor": "@nx/js:node",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "buildTarget": "auth-service:build",
+          "runBuildTargetDependencies": false
+        },
+        "configurations": {
+          "production": {
+            "buildTarget": "auth-service:build:production"
+          },
+          "development": {
+            "buildTarget": "auth-service:build:development"
+          }
+        }
+      },
+      "test": {
+        "options": {
+          "passWithNoTests": true
+        }
+      }
+    }
+  }
+}
